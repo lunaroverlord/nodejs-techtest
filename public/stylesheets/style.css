@@ -6,3 +6,18 @@ body {
 a {
   color: #00B7FF;
 }
+
+.panel {
+        padding: 40px;
+        width: 40%;
+}
+
+.panel-top {
+        font-size: 35px;
+}
+
+.panel-body {
+}
+
+button {
+}
