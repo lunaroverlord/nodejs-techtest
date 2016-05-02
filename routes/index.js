@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var orm = require('orm');
+var turf = require('turf');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,29 +22,36 @@ router.get('/get-skills', function(req, res, next) {
 
 });
 
-/* GET carers by skills or postcode. */
+/* GET carers by skills. If postcode is supplied, attach distances to the results. */
 router.get('/search', function(req, res, next) {
-	console.log(req.models.Skill);
 	var skillIds = req.query.skills.split(',');
+	var target = req.query.target;
+
+	// For each requested skill...
 	req.models.Skill.find({id: skillIds}, function(err, skills)
 	{
 		var carers = [];
 		var collections = 0;
 
-		// Count number of collections - one for each skill; each collection adds carers
+		// Asynchronous collector - sends response only when full
 		var collector = function(carersForSkill)
 		{
-			carers.push(carersForSkill);
+			// Count number of collections - one for each skill; each collection adds carers
 			collections++;
+			carers.push(carersForSkill);
+
+			// If all collected
 			if(collections == skills.length)
 			{
 				var flat = [].concat.apply([], carers); //flatten
 				var distilled = Array.from(new Set(flat)); //remove dupes
+				if(target) //add dist to target
+					distilled = addDistanceToCarers(distilled, target); 
 				res.end(JSON.stringify(distilled)); //send back
 			}
 		}
 
-		// Query for carers for each skill
+		// Get (collect) carers for each skill
 		skills.forEach(function(sk)
 		{
 			sk.getCarers(function(err, carers) {collector(carers);});
@@ -53,5 +61,20 @@ router.get('/search', function(req, res, next) {
 		
 	});
 });
+
+// Helper used to augment the JSON array of carers with distances from 'pointFrom'
+function addDistanceToCarers(carers, target)
+{
+	carers.forEach(
+		c =>
+		{ 
+			//long, lat
+			var startPoint = turf.point(target);
+			var endPoint = turf.point([c["longitude"], c["latitude"]]);
+			c.distance = turf.distance(startPoint, endPoint); 
+		});
+	return carers;
+}
+
 
 module.exports = router;

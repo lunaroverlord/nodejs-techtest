@@ -10,6 +10,7 @@ a {
 .panel {
         padding: 40px;
         width: 40%;
+	min-width: 300px;
 }
 
 .panel-top {
@@ -20,4 +21,48 @@ a {
 }
 
 button {
+}
+
+/* Chrome - remove brown background from input */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    color: #fff !important;
+}
+
+.spacer
+{
+	height: 40px;
+}
+
+#results
+{
+	min-height: 40px;
+}
+
+#results .carer-box
+{
+	display: block;
+	padding: 10px;
+	width: 100%;
+	min-height: 90px;
+	padding-left: 90px;
+	background: url(../images/head.png) no-repeat;
+	background-size: 80px 80px;
+	background-position: left center;
+}
+
+.carer-name
+{
+	font-weight: bold;
+}
+.carer-skills
+{
+	color: gray;
+}
+
+.green-check
+{
+	width: 40px;
+	height: 40px;
+	background: url(../images/check.png) no-repeat !important;
 }
