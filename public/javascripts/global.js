@@ -1,7 +1,11 @@
-$("#serch-form").submit(function()
+$("#search-form").submit(function(e)
 {
-	
+	console.log($("#skills").val());
+	$.getJSON("/search", {skills: $("#skills").val()}, function(data) {console.log(data)});
+	e.preventDefault();
 });
+
+
 // Token field for skills input
 $('#skills').tokenfield({
 	duplicateChecker: true, // Apparently doesn't work
@@ -20,7 +24,8 @@ $('#skills').tokenfield({
 
 					skills = [];
 					for(var entry in data)
-						skills.push(data[entry]["name"]);
+						skills.push({label: data[entry]["name"],
+								value: entry});
 					res(skills);
 				});
 		},

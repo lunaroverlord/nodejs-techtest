@@ -36,8 +36,18 @@ DB.prototype.define = function (db, models) {
 	models.Skill = Skill;
 
 	//console.log("adding to models %o", models);
-	db.sync(function(err) { if(err) throw err;});
 	
+}
+
+DB.prototype.synchronize = function()
+{
+	orm.connect(connString, function(err, db)
+	{
+		if(err) throw err;
+		models = {};
+		DB.prototype.define(db, models);
+		db.sync(function(err) { if(err) throw err; console.log("Sync OK");});
+	});
 }
 
 //Returns just the models
