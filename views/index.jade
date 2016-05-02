@@ -1,16 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p= skills
-  div.panel.panel-default
+  div.panel.panel-default.center-block
     div.panel-body
       p.panel-top.text-center Find a carer
-      form(role="form") 
+
+      form#search-form(role="form") 
         div.form-group
           label(for="skills") Search by skill
           input.form-control#skills
           label(for="postcode") Search by postcode
           input.form-control#postcode
 
-          button.btn.btn-success(type="button") Search
+          button.btn.center-block.btn-success(type="button") Search

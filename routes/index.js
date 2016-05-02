@@ -1,18 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  database : 'techtest',
-  password : 'qwerty'
-});
-
-connection.connect();
-
-
-connection.end();
+var orm = require('orm');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -24,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 /* GET skills list. */
 router.get('/get-skills', function(req, res, next) {
-	req.models.Skill.find({}, function(err, result)
+	req.models.Skill.find({name: orm.like('%'+req.query.q+'%')}, function(err, result)
 	{
 		var skills = JSON.stringify(result);
 		res.end(skills);
