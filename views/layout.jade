@@ -14,9 +14,9 @@ html
        nav.navbar.navbar-default
          .container-fluid
            ul.nav.navbar-nav
-             li.active
+             li(class=(active=="search" ? "active" : ""))
                a(href="/") Search for carers
-             li
+             li(class=(active=="register" ? "active" : ""))
                a(href="/register") Register as carer
 
     block content

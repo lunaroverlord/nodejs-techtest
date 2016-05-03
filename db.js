@@ -1,28 +1,32 @@
 var orm = require('orm');
 
+orm.settings.set("instance.returnAllErrors", true);
 
 connString = "mysql://root:qwerty@localhost/techtest";
+
 var DB = function()
 {
 }
 
 DB.prototype.define = function (db, models) {
-	//if (err) throw err;
-
 	var Carer = db.define("carer", {
-		name      : String,
-		postcode   : String,
-		latitude       : Number, // FLOAT
+		name           : String,
+		postcode       : String,
+		latitude       : Number, //FLOAT
 		longitude      : Number, //FLOAT
-	}, {
+		},
+		{
 		autoSave: true,
-		methods: {
-			fullName: function () {
-				return this.name;
-			}
+		autoFetch: true,
+		methods: 
+		{
+			coords: function () { return [this.longitude, this.latitude]; }
 		},
 		validations: {
-			//age: orm.enforce.ranges.number(18, undefined, "under-age")
+			name: [
+				orm.enforce.unique({ scope: ['postcode'] }, "Sorry, name is already registered at this postcode"),
+				orm.enforce.notEmptyString("Name can't be empty")
+			]
 		}
 	});
 
@@ -34,9 +38,6 @@ DB.prototype.define = function (db, models) {
 
 	models.Carer = Carer;
 	models.Skill = Skill;
-
-	//console.log("adding to models %o", models);
-	
 }
 
 DB.prototype.synchronize = function()
@@ -62,6 +63,7 @@ DB.prototype.loadModels = function(callback)
 	});
 }
 
+//Express middleware connector
 DB.prototype.express = function()
 {
 	return orm.express(connString, {

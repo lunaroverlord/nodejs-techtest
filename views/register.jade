@@ -1,6 +1,11 @@
 extends layout
 
 block content
+  if message
+    .alert.alert-info= message 
+  else if error
+    .alert.alert-danger= error 
+
   div.panel.panel-default.center-block
     div.panel-body
       p.panel-top.text-center Register as a carer
@@ -21,6 +26,6 @@ block content
           input.form-control.postcode-coords-resolver#postcode(name="postcode")
           div.spacer
 
-          button.btn.center-block.btn-success(type="submit") Register
+          button.btn.center-block.btn-success.submit-button(type="submit") Register
           div.spacer
 

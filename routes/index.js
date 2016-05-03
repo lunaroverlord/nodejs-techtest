@@ -8,9 +8,13 @@ var turf = require('turf');
 router.get('/', function(req, res, next) {
 	req.models.Skill.find({}, function(err, skills)
 	{
-		res.render('index', { title: 'Olaf tech test', skills: JSON.stringify(skills) });
+		res.render('index', { title: 'Olaf tech test', active: "search", skills: JSON.stringify(skills) });
 	});
 });
+
+/*
+ * Search
+ */
 
 /* GET skills list. */
 router.get('/get-skills', function(req, res, next) {
@@ -51,11 +55,21 @@ router.get('/search', function(req, res, next) {
 			}
 		}
 
-		// Get (collect) carers for each skill
-		skills.forEach(function(sk)
+		// Get carers for each skill using the collector
+		if(skills.length > 0)
+			skills.forEach(function(sk)
+			{
+				sk.getCarers(function(err, carers) {collector(carers);});
+			});
+		//Otherwise, return carers in distance order
+		else if(target)
 		{
-			sk.getCarers(function(err, carers) {collector(carers);});
-		});
+			req.models.Carer.all(function(err, carers)
+			{
+				carers = addDistanceToCarers(carers, target); 
+				res.end(JSON.stringify(carers)); //send back
+			});
+		}
 
 		
 		
@@ -76,14 +90,92 @@ function addDistanceToCarers(carers, target)
 	return carers;
 }
 
+/*
+ * Registrations 
+ */
+
+// GET
 router.get('/register', function(req, res, next) {
-	res.render('register', { title: 'Register' });
+	res.render('register', {active: "register", title: 'Register' });
 });
 
+// POST
 router.post('/register', function(req, res, next) {
-	//req.models.Carer.crete
-	console.log(req.body);
-	res.end("Success");
+	// Skillls:
+	// numeric skills are existing IDs
+	// plaintext skills are new skills
+	console.log(req.body.skills);
+	if(req.body.skills == '')
+	{
+		res.render('register', {error: "Must add at least 1 skill"});
+		return res.end();
+	}
+	var skillsList = req.body.skills.split(',');//.map(s => s.trim());
+
+	getSkillObjects(req.models, skillsList,
+		function(skillObjects)
+		{
+			var coords = req.body.coords.split(',');
+			req.models.Carer.create(
+				{
+					name: req.body.name,
+					skills: skillObjects,
+					postcode: req.body.postcode,
+					longitude: coords[0],
+					latitude: coords[1]
+				}, function(err)
+				{
+					if(err)
+					{
+						//console.log("Error ", err);
+						if(err instanceof Array)
+							res.render('register', {error: err[0].msg});
+						else
+							res.render('register', {error: "Error: " + err});
+					}
+					else res.render('register', {message: "Registered successfully"});
+				});
+		});
+	
 });
 
+// Retrieves model.Skill objects for a given skills list, creating new records as needed
+// callback: function(skillObjects)
+function getSkillObjects(models, skillsList, callback)
+{
+
+	// Collector for DB objects
+	var skillObjects = [];
+	var skillsCollector = function(s)
+	{
+		skillObjects.push(s);
+		if(skillObjects.length == skillsList.length)
+			callback(skillObjects);
+	};
+
+	// Check each item
+	var newSkills = [];
+	skillsList.forEach(function(skillToken)
+	{
+		//numeric id
+		if(isFinite(skillToken))
+		{
+			models.Skill.find({id: skillToken}, function(err, data)
+			{
+				skillsCollector(data[0]);
+			});
+		}
+		//new skill
+		else 
+		{
+			newSkills.push({name: skillToken});
+		}
+	});
+
+	//Create and collect objects of new skills
+	models.Skill.create(newSkills, function(err, items)
+	{
+		items.map(skillsCollector);
+	});
+}
 module.exports = router;

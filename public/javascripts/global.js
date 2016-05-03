@@ -4,35 +4,56 @@ var pcCoordsLock = false;
 
 $("#search-form").submit(function(e)
 {
-	console.log("sending pcCoords ", pcCoords);
-	$.getJSON("/search", {skills: $("#skills").val(), target: pcCoords},
-		function(data)
-		{
-			console.log(data);
-
-			$("#results").empty();
-			data.sort(function(a, b)
-			{
-				return a["distance"] > b["distance"] ? 1 : -1;
-			});
-			data.forEach(function(carer)
-			{
-				var distanceLine = "";
-				if(carer["distance"] > 0)
-					distanceLine += "<p>Distance: " + Math.round(carer["distance"]) + "km</p>";
-
-				$("#results").append(
-					"<div class='carer-box'>" +
-					"<p class='carer-name'>" + carer["name"] + "</p>" +
-					"<p class='carer-skills'>Experience in: " + $("#skills").attr("label") + "</p>" +
-					distanceLine +
-					"</div>");
-			});
-		});
 	e.preventDefault();
+
+	// Either postcode or skills must be present
+	if(pcCoords.length == 0 && $("#skills").val() == "")
+		highlightMissing("#postcode");
+	else
+	{
+		$.getJSON("/search", {skills: $("#skills").val(), target: pcCoords},
+			function(data)
+			{
+				console.log(data);
+
+				$("#results").empty();
+				data.sort(function(a, b)
+				{
+					return a["distance"] > b["distance"] ? 1 : -1;
+				});
+				data.forEach(function(carer)
+				{
+					var distanceLine = "";
+					if(carer["distance"] > 0)
+						distanceLine += "<p>Distance: " + Math.round(carer["distance"]) + "km</p>";
+					
+					var skills = carer.skills.map(sk => sk["name"]).join(', ');
+					$("#results").append(
+						"<div class='carer-box'>" +
+						"<p class='carer-name'>" + carer["name"] + "</p>" +
+						"<p class='carer-skills'>Experience in: " + skills + "</p>" +
+						distanceLine +
+						"</div>");
+				});
+			});
+	}
 });
 
-
+/*
+ * Register form: just add the client-resolved coords for their postcode
+ */
+$("#register-form").submit(function(e)
+{
+	if(pcCoords != undefined && pcCoords.length == 2)
+	{
+		var coordsHolder = "<input type='hidden' name='coords' value='" + pcCoords + "'>";
+		$(this).append(coordsHolder);
+	}
+	else
+	{
+		e.preventDefault();
+	}
+});
 /*
  * Token field for skills input
  */
@@ -84,29 +105,40 @@ $('#skills').on('tokenfield:createtoken', function (event) {
  */
 $(".postcode-coords-resolver").change(resolveCoords);
 $(".postcode-coords-resolver").blur(resolveCoords);
+$(".postcode-coords-resolver").keyup(resolveCoords);
 function resolveCoords()
 {
 	var input = $(this);
+
+	//shortest postcode length = 5
+	//http://www.answers.com/Q/What_is_the_shortest_postal_code_in_UK
+	if(input.val().length < 5) 
+		return;
+
 	var getPostcodeCoords = function()
 	{
+		// Prevent user action while resolving postcode
 		pcCoordsLock = true;
+		$(".submit-button").prop("disabled", true);
+
 		$.getJSON("http://api.postcodes.io/postcodes/" + $("#postcode").val(), 
 			function(resp)
 			{
-				//console.log(resp);
 				if(resp["result"]["longitude"] && resp["result"]["latitude"])
 				{
 					pcCoords = [resp["result"]["longitude"], resp["result"]["latitude"]];
-					$(input).css("border", "2px solid green");
+					highlightCorrect(input);
 				}
 				pcCoordsLock = false;
+				$(".submit-button").prop("disabled", false);
 			}).error(
-				function()  //404
-				{
-					$(input).css("border", "1px solid red");
-					pcCoords = [];
-					pcCoordsLock = false;
-				});
+			function()  //404
+			{
+				highlightMissing(input);
+				pcCoords = [];
+				pcCoordsLock = false;
+				$(".submit-button").prop("disabled", false);
+			});
 	}
 
 	delay(getPostcodeCoords, 400);  //400ms from event until coords are retrieved
@@ -122,3 +154,14 @@ var delay = (function()
 		timer = setTimeout(callback, ms);
 	};
 })();
+
+// Makes an input field red
+function highlightMissing(elem)
+{
+	$(elem).css("border-color", "red");
+}
+// Makes an input field red
+function highlightCorrect(elem)
+{
+	$(elem).css("border-color", "green");
+}
