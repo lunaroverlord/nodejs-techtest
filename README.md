@@ -1,6 +1,10 @@
 # node.js test
 
 ## Install & run
+Set up a MySQL database with imported data from techtest/techtest.sql
+
+Configure access credentials in db.js 
+
 ```
 npm install
 npm start
@@ -15,10 +19,11 @@ npm start
 * [Twitter Bootstrap] - UI boilerplate
 * [Express] - fast node.js network app framework
 * [Mocha] - testing framework
-* [jQuery] - duh
+* [jQuery]  
 
 ## Todo
  * Write Tests
+ * jslint checklist
 
    [node.js]: <http://nodejs.org>
    [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
