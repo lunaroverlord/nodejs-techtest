@@ -1,5 +1,5 @@
 # node.js test
-
+[http://olafs.eu:3000](http://olafs.eu:3000)
 ## Installing
 The default settings allow you to run it with the database hosted on my server.
 ###Own database:
@@ -13,6 +13,7 @@ Format: `protocol://user:password@host:port/database`
 npm install
 ./run.sh
 ```
+To stop the server, `./kill.sh`
 ## Bugs
 * Skill lookups are case-sensitive; this requires a change of ORM
 * Skills can't be numbers (I don't think anyone needs that, but still)
