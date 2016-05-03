@@ -33,7 +33,7 @@ router.get('/search', function(req, res, next) {
 		var carers = [];
 		var collections = 0;
 
-		// Asynchronous collector - sends response only when full
+		// Asynchronous collector - sends http response only when full
 		var collector = function(carersForSkill)
 		{
 			// Count number of collections - one for each skill; each collection adds carers
@@ -76,5 +76,14 @@ function addDistanceToCarers(carers, target)
 	return carers;
 }
 
+router.get('/register', function(req, res, next) {
+	res.render('register', { title: 'Register' });
+});
+
+router.post('/register', function(req, res, next) {
+	//req.models.Carer.crete
+	console.log(req.body);
+	res.end("Success");
+});
 
 module.exports = router;

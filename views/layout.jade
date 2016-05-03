@@ -10,6 +10,14 @@ html
     link(rel='stylesheet', href='/stylesheets/bootstrap-tokenfield.min.css')
 
   body
+    .nav-limiter
+       nav.navbar.navbar-default
+         .container-fluid
+           ul.nav.navbar-nav
+             li.active
+               a(href="/") Search for carers
+             li
+               a(href="/register") Register as carer
 
     block content
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')

@@ -3,16 +3,19 @@ extends layout
 block content
   div.panel.panel-default.center-block
     div.panel-body
+
       p.panel-top.text-center Find a carer
+      div.spacer
 
       form#search-form(role="form") 
         div.form-group
           label(for="skills") Search by skill
-          input.form-control#skills
+          input.form-control.skills-chooser#skills
+          div.spacer
           label(for="postcode") Search by postcode
-          input.form-control#postcode
-
+          input.form-control.postcode-coords-resolver#postcode
           div.spacer
           button.btn.center-block.btn-success(type="submit") Search
+          div.spacer
 
       div#results

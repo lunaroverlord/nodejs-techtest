@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  div.panel.panel-default.center-block
+    div.panel-body
+      p.panel-top.text-center Register as a carer
+      div.spacer
+
+      form#register-form(role="form" method="post" action="/register") 
+        div.form-group
+
+          label(for="register-name") What is your full name?
+          input.form-control#register-name(name="name")
+          div.spacer
+
+          label(for="register-skills") Add your skills
+          input.form-control.skills-chooser#register-skills(name="skills")
+          div.spacer
+
+          label(for="postcode") What is your postcode?
+          input.form-control.postcode-coords-resolver#postcode(name="postcode")
+          div.spacer
+
+          button.btn.center-block.btn-success(type="submit") Register
+          div.spacer
+

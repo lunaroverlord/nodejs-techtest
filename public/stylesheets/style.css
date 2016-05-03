@@ -51,6 +51,13 @@ input:-webkit-autofill {
 	background-position: left center;
 }
 
+.token
+{
+	color: white;
+	font-weight: bold;
+	background: #51a7f9 !important;
+}
+
 .carer-name
 {
 	font-weight: bold;
@@ -65,4 +72,10 @@ input:-webkit-autofill {
 	width: 40px;
 	height: 40px;
 	background: url(../images/check.png) no-repeat !important;
+}
+
+.nav-limiter
+{
+	margin: auto;
+	max-width: 320px;
 }

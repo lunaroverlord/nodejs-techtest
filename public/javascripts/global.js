@@ -33,8 +33,10 @@ $("#search-form").submit(function(e)
 });
 
 
-// Token field for skills input
-$('#skills').tokenfield({
+/*
+ * Token field for skills input
+ */
+$('.skills-chooser').tokenfield({
 	duplicateChecker: true, // Apparently doesn't work
 	autocomplete: 
 	{
@@ -76,9 +78,15 @@ $('#skills').on('tokenfield:createtoken', function (event) {
 
 });
 
-// Find coords from postcode (when entered), store in global pcCoords
-$("#postcode").keyup(function()
+
+/*
+ * Find coords from postcode (when entered), store in global pcCoords
+ */
+$(".postcode-coords-resolver").change(resolveCoords);
+$(".postcode-coords-resolver").blur(resolveCoords);
+function resolveCoords()
 {
+	var input = $(this);
 	var getPostcodeCoords = function()
 	{
 		pcCoordsLock = true;
@@ -89,20 +97,20 @@ $("#postcode").keyup(function()
 				if(resp["result"]["longitude"] && resp["result"]["latitude"])
 				{
 					pcCoords = [resp["result"]["longitude"], resp["result"]["latitude"]];
-					$("#postcode").css("border", "2px solid green");
+					$(input).css("border", "2px solid green");
 				}
 				pcCoordsLock = false;
 			}).error(
 				function()  //404
 				{
-					$("#postcode").css("border", "1px solid red");
+					$(input).css("border", "1px solid red");
 					pcCoords = [];
 					pcCoordsLock = false;
 				});
 	}
 
-	delay(getPostcodeCoords, 400);  //400ms from keyup until coords are retrieved
-});
+	delay(getPostcodeCoords, 400);  //400ms from event until coords are retrieved
+}
 
 //Delay helper function
 var delay = (function()
