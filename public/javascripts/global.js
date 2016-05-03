@@ -51,6 +51,7 @@ $("#register-form").submit(function(e)
 	}
 	else
 	{
+		highlightMissing("#postcode");
 		e.preventDefault();
 	}
 });
@@ -90,12 +91,20 @@ $('.skills-chooser').tokenfield({
 });
 
 // Prevent duplicates in skills field
-$('#skills').on('tokenfield:createtoken', function (event) {
+// TODO: Causes issues with gecko, fix commented parts
+$('.skills-chooser').on('tokenfield:createtoken', function (event) {
+	if(isNaN(event.attrs.value)) //only numbers are ok
+	{
+		//$(".skills-chooser").val(""); //remove slack text
+		return false;
+	}
+	/*
 	var existingTokens = $(this).tokenfield('getTokens');
 	$.each(existingTokens, function(index, token) {
 		if (token.label === event.attrs.label)
 			event.preventDefault();
 	});
+	*/
 
 });
 
