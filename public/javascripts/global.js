@@ -90,24 +90,28 @@ $('.skills-chooser').tokenfield({
         showAutocompleteOnFocus: true
 });
 
-// Prevent duplicates in skills field
+// Search skills entry: prevent duplicates
 // TODO: Causes issues with gecko, fix commented parts
-$('.skills-chooser').on('tokenfield:createtoken', function (event) {
+$('#skills').on('tokenfield:createtoken', function (event) {
+	console.log(event.attrs);
         if(isNaN(event.attrs.value)) //only numbers are ok
         {
                 //$(".skills-chooser").val(""); //remove slack text
                 return false;
         }
         /*
+        */
+
+});
+
+// Registration skills entry:
+$('#register-skills').on('tokenfield:createtoken', function (event) {
         var existingTokens = $(this).tokenfield('getTokens');
         $.each(existingTokens, function(index, token) {
                 if (token.label === event.attrs.label)
                         event.preventDefault();
         });
-        */
-
 });
-
 
 /*
  * Find coords from postcode (when entered), store in global pcCoords
