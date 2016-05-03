@@ -80,7 +80,7 @@ router.get('/search', function(req, res, next) {
 function addDistanceToCarers(carers, target)
 {
         carers.forEach(
-                c =>
+                function(c)
                 { 
                         //long, lat
                         var startPoint = turf.point(target);

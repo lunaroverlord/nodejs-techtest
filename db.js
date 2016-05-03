@@ -2,7 +2,7 @@ var orm = require('orm');
 
 orm.settings.set("instance.returnAllErrors", true);
 
-connString = "mysql://techtest:zzraELJXa9nDUjGV@olafs.eu/techtest";
+connString = "mysql://techtest:zzraELJXa9nDUjGV@108.61.173.171:3306/techtest";
 
 var DB = function()
 {
