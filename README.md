@@ -33,7 +33,7 @@ then run
 * [jQuery]  
 
 ## Todo
- * Write Tests
+ * Write carer registration tests (need fixtures)
  * jslint checklist
 
    [node.js]: <http://nodejs.org>
