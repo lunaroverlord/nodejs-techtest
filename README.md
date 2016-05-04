@@ -14,9 +14,16 @@ npm install
 ./run.sh
 ```
 To stop the server, `./kill.sh`
+### Running tests
+Mocha needs to be installed globally
+```sudo npm install mocha -g```
+then run
+`mocha`
+
 ## Bugs
 * Skill lookups are case-sensitive; this requires a change of ORM
 * Skills can't be numbers (I don't think anyone needs that, but still)
+* Minor hiccups on the skills/postcode inputs -- need to be ironed out
 
 ## Tech
 * [node.js] - evented I/O for the backend

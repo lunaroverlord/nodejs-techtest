@@ -104,7 +104,6 @@ router.post('/register', function(req, res, next) {
         // Skillls:
         // numeric skills are existing IDs
         // plaintext skills are new skills
-        console.log(req.body.skills);
         if(req.body.skills == '')
         {
                 res.render('register', {error: "Must add at least 1 skill"});
@@ -127,7 +126,6 @@ router.post('/register', function(req, res, next) {
                                 {
                                         if(err)
                                         {
-                                                //console.log("Error ", err);
                                                 if(err instanceof Array)
                                                         res.render('register', {error: err[0].msg});
                                                 else

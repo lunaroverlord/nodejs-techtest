@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.0
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 02, 2016 at 11:17 AM
--- Server version: 10.0.24-MariaDB-7
--- PHP Version: 5.6.20-1
+-- Generation Time: May 04, 2016 at 08:48 AM
+-- Server version: 10.0.23-MariaDB-0ubuntu0.15.10.1
+-- PHP Version: 5.6.11-1ubuntu3.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -43,7 +43,7 @@ INSERT INTO `carer` (`name`, `postcode`, `latitude`, `longitude`, `id`) VALUES
 ('Amy Winehouse', 'BS8 3PZ', 51.4557, -2.64287, 92),
 ('James Bond', 'S10 3ER', 53.3714, -1.50563, 93),
 ('Homer Simpson', 'S7 1DP', 53.3642, -1.4799, 94),
-('Kiera Knightley ', 'SE11 4LD', 51.4867, -0.111805, 95),
+('Kiera Knightley', 'SE11 4LD', 51.4867, -0.111805, 95),
 ('Emma Watson', 'EC1Y 2AA', 51.5222, -0.0874757, 96);
 
 -- --------------------------------------------------------
