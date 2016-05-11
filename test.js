@@ -5,7 +5,7 @@ var app = require("./app.js");
  * Tests assume that the provided database with 6 carers is connected on app
  */
 
-describe('Skills getter works', function()
+describe('Skills getter returns Autism for query "s"', function()
 {
         /*
          * 's' should return 'Autism'
@@ -32,7 +32,7 @@ describe('Carers can be retrieved', function()
         /*
          * James Bond and Kiera Knightley possess skills 94, 98  
          */
-        it('Returns the correct carers for a skillset', function(done)
+        it('Returns the correct carers James and Kiera for their skills 94, 98', function(done)
         {
                 request(app)
                         .get('/search?skills=94,98')
@@ -60,7 +60,7 @@ describe('Carers can be retrieved', function()
          * Approx. distance from Bob Diamond with skill 81: 10km
          * http://tinyurl.com/hkynm64
          */
-        it('Distances are calculated correctly', function(done)
+        it('Distance from Bob Diamond to a spot 10km away is calculated correctly', function(done)
         {
                 request(app)
                         .get('/search?skills=81&target[]=-0.000499010074923&target[]=51.4612232818')
